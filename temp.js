@@ -1,0 +1,16 @@
+module.exports = {
+  host: 'localhost:50094',
+  'x-forwarded-host': 'localhost:3000',
+  'x-forwarded-proto': 'http',
+  'x-forwarded-port': '3000',
+  'x-forwarded-for': '::1',
+  'x-vercel-id': 'dev1::dev1::oo8io-1645129115486-7ee603bd5bca',
+  'x-vercel-forwarded-for': '::1',
+  'x-vercel-deployment-url': 'localhost:3000',
+  'x-real-ip': '::1',
+  connection: 'close',
+  'content-length': '0',
+  accept: '*/*',
+  'content-type': 'application/json',
+  'user-agent': 'insomnia/2021.7.2',
+};

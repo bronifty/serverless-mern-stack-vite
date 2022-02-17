@@ -1,19 +1,37 @@
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
+// create axios client for useQuery with dynamic baseURL based on req.headers['x-forwarded-host'];
+const client = axios.create({ baseURL: 'http://localhost:4000' });
+
+export const request = ({ ...options }) => {
+  client.defaults.headers.common.Authorization =
+    'Bearer ' + localStorage.getItem('token');
+  const onSuccess = (response) => response;
+  const onError = (error) => {
+    console.log({ error });
+    return error;
+  };
+  return client(options).then(onSuccess).catch(onError);
+};
+
 const onSuccess = (data) => {
-  // console.log('side effect on success', data);
+  console.log('side effect on success', data);
   return { message: 'success' };
 };
 const onError = (error) => {
   // console.log('side effect on error', error);
   return { message: 'error' };
 };
-
+// req.headers.origin;
 export const getAllTasks = () => {
-  return axios
-    .get('http://localhost:3000/api/v1/tasks')
-    .then((res) => res.data);
+  return fetch('/api/v1/tasks', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  }).then((res) => res.json);
 };
 export const useGetAllTasks = (onSuccess, onError) => {
   return useQuery('fetchAll', getAllTasks, {
@@ -25,9 +43,17 @@ export const useGetAllTasks = (onSuccess, onError) => {
 export const addItem = async (name) => {
   // throw new Error('not implemented');
   // await new Promise((resolve) => setTimeout(resolve, 1000));
-  return axios
-    .post('http://localhost:3000/api/v1/tasks', { name })
-    .then((res) => res.data);
+  console.log('in the post request for addOne');
+  return fetch('/api/v1/tasks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  }).then((res) => res.json);
+  // return axios
+  //   .post('http://localhost:3000/api/v1/tasks', { name })
+  //   .then((res) => res.data);
 };
 export const useAddItem = () => {
   const queryClient = useQueryClient();

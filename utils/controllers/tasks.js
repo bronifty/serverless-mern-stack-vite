@@ -3,8 +3,9 @@ const uri = process.env.MONGO_URI;
 const { connectDb, closeDb } = require('../db/connect');
 const Task = require('../models/Task');
 const getAllTasks = async (req, res) => {
-  console.log('does this thing work?');
+  const hostUrl = req.headers['x-forwarded-host'];
   try {
+    console.log('JSON.parse(req.headers): ', hostUrl);
     await connectDb(uri);
     const tasks = await Task.find({});
     res.status(200).json({ tasks });
