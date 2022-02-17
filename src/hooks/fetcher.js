@@ -3,7 +3,7 @@ export default async (options) => {
   try {
     if (options.body) {
       res = await fetch(
-        `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+        `${options.id ? options.baseURL + options.id : options.baseURL}`,
         {
           method: options.method,
           headers: {
@@ -16,7 +16,7 @@ export default async (options) => {
       return res.json();
     } else {
       res = await fetch(
-        `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+        `${options.id ? options.baseURL + options.id : options.baseURL}`,
         {
           method: options.method,
           headers: {

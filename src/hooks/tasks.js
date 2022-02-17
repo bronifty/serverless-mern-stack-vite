@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import fetcher from './fetcher';
-const baseURL = '/api/v1/tasks';
+const baseURL = '/api/v1/tasks/';
 const options = {
   baseURL,
 };
