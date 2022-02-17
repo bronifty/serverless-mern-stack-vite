@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-
+import fetcher from './fetcher';
 // // create axios client for useQuery with dynamic baseURL based on req.headers['x-forwarded-host'];
 // const client = axios.create({ baseURL: 'http://localhost:4000' });
 
@@ -15,40 +15,40 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 //   return client(options).then(onSuccess).catch(onError);
 // };
 
-const fetcher = async (options) => {
-  let res;
-  try {
-    if (options.body) {
-      res = await fetch(
-        `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
-        {
-          method: options.method,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-          body: JSON.stringify(options.body),
-        }
-      );
-      return res.json();
-    } else {
-      res = await fetch(
-        `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
-        {
-          method: options.method,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        }
-      );
-      return res.json();
-    }
-  } catch (error) {
-    console.log({ error });
-    return res.json(error);
-  }
-};
+// const fetcher = async (options) => {
+//   let res;
+//   try {
+//     if (options.body) {
+//       res = await fetch(
+//         `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+//         {
+//           method: options.method,
+//           headers: {
+//             'Content-Type': 'application/json',
+//             'Access-Control-Allow-Origin': '*',
+//           },
+//           body: JSON.stringify(options.body),
+//         }
+//       );
+//       return res.json();
+//     } else {
+//       res = await fetch(
+//         `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+//         {
+//           method: options.method,
+//           headers: {
+//             'Content-Type': 'application/json',
+//             'Access-Control-Allow-Origin': '*',
+//           },
+//         }
+//       );
+//       return res.json();
+//     }
+//   } catch (error) {
+//     console.log({ error });
+//     return res.json(error);
+//   }
+// };
 
 export const getAllTasks = async () => {
   const options = { method: 'GET' };
