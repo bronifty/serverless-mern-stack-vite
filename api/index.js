@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
 const tasks = require('../utils/routes/tasks');
-const connectDb = require('../utils/db/connect');
-require('dotenv').config();
+require('../utils/db/connect');
 const cors = require('cors');
 // middleware
 app.use(express.json());

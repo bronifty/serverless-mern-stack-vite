@@ -1,43 +1,72 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
-// create axios client for useQuery with dynamic baseURL based on req.headers['x-forwarded-host'];
-const client = axios.create({ baseURL: 'http://localhost:4000' });
+// // create axios client for useQuery with dynamic baseURL based on req.headers['x-forwarded-host'];
+// const client = axios.create({ baseURL: 'http://localhost:4000' });
 
-export const request = ({ ...options }) => {
-  client.defaults.headers.common.Authorization =
-    'Bearer ' + localStorage.getItem('token');
-  const onSuccess = (response) => response;
-  const onError = (error) => {
-    console.log({ error });
-    return error;
-  };
-  return client(options).then(onSuccess).catch(onError);
+// export const request = ({ ...options }) => {
+//   client.defaults.headers.common.Authorization =
+//     'Bearer ' + localStorage.getItem('token');
+//   const onSuccess = (response) => response;
+//   const onError = (error) => {
+//     console.log({ error });
+//     return error;
+//   };
+//   return client(options).then(onSuccess).catch(onError);
+// };
+
+const fetcher = async (options) => {
+  console.log({ options });
+  let res;
+
+  if (options.body) {
+    res = await fetch(
+      `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+      {
+        method: options.method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify(options.body),
+      }
+    );
+    return res.json();
+  } else {
+    res = await fetch(
+      `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
+      {
+        method: options.method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
+    return res.json();
+    // const data = await res.json();
+    // console.log({ data });
+    // return data;
+  }
 };
 
-const onSuccess = (data) => {
-  console.log('side effect on success', data);
-  return { message: 'success' };
-};
-const onError = (error) => {
-  // console.log('side effect on error', error);
-  return { message: 'error' };
-};
-// req.headers.origin;
-export const getAllTasks = () => {
-  return fetch('/api/v1/tasks', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  }).then((res) => res.json);
+export const getAllTasks = async () => {
+  const options = { method: 'GET' };
+  return await fetcher(options);
+
+  // const request = await fetch('/api/v1/tasks', {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  // });
+  // const data = await request.json();
+  // console.log({ data });
+  // return data;
 };
 export const useGetAllTasks = (onSuccess, onError) => {
-  return useQuery('fetchAll', getAllTasks, {
-    onSuccess,
-    onError,
-  });
+  return useQuery('fetchAll', getAllTasks);
 };
 
 export const addItem = async (name) => {
@@ -50,7 +79,10 @@ export const addItem = async (name) => {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     },
-  }).then((res) => res.json);
+    body: JSON.stringify({ name }),
+  })
+    .then((res) => res.json)
+    .then((res) => res.task);
   // return axios
   //   .post('http://localhost:3000/api/v1/tasks', { name })
   //   .then((res) => res.data);
@@ -58,8 +90,6 @@ export const addItem = async (name) => {
 export const useAddItem = () => {
   const queryClient = useQueryClient();
   return useMutation(addItem, {
-    onSuccess,
-    onError,
     onMutate: async (item) => {
       await queryClient.cancelQueries('fetchAll');
       const prevData = queryClient.setQueryData('fetchAll', (prevState) => {

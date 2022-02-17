@@ -1,35 +1,36 @@
-require('dotenv').config();
-const uri = process.env.MONGO_URI;
-const { connectDb, closeDb } = require('../db/connect');
+// require('dotenv').config();
+// const uri = process.env.MONGO_URI;
+// const { connectDb, closeDb } = require('../db/connect');
+// require('../db/connect');
 const Task = require('../models/Task');
 const getAllTasks = async (req, res) => {
   // const hostUrl = req.headers['x-forwarded-host'];
   try {
     // console.log('JSON.parse(req.headers): ', hostUrl);
-    await connectDb(uri);
+    // await connectDb(uri);
     const tasks = await Task.find({});
     res.status(200).json({ tasks });
   } catch (error) {
     res.status(500).json({ msg: error });
   } finally {
-    await closeDb();
+    // await closeDb();
   }
 };
 
 const createTask = async (req, res) => {
   try {
-    await connectDb(uri);
+    // await connectDb(uri);
     const task = await Task.create(req.body);
     res.status(201).json({ task });
   } catch (error) {
     res.status(500).json({ msg: error });
   } finally {
-    await closeDb();
+    // await closeDb();
   }
 };
 const getTask = async (req, res) => {
   try {
-    await connectDb(uri);
+    // await connectDb(uri);
     const task = await Task.findOne({ _id: req.params.id });
     if (!task) {
       return res
@@ -40,12 +41,12 @@ const getTask = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: error });
   } finally {
-    await closeDb();
+    // await closeDb();
   }
 };
 const deleteTask = async (req, res) => {
   try {
-    await connectDb(uri);
+    // await connectDb(uri);
     const task = await Task.findOneAndDelete({ _id: req.params.id });
     if (!task) {
       return res
@@ -56,12 +57,12 @@ const deleteTask = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: error });
   } finally {
-    await closeDb();
+    // await closeDb();
   }
 };
 const updateTask = async (req, res) => {
   try {
-    await connectDb(uri);
+    // await connectDb(uri);
     const task = await Task.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
       runValidators: true,
@@ -75,7 +76,7 @@ const updateTask = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: error });
   } finally {
-    await closeDb();
+    // await closeDb();
   }
 };
 
