@@ -6,20 +6,8 @@ const options = {
 };
 
 export const getAllTasks = async () => {
-  // const options = { method: 'GET' };
   options.method = 'GET';
   return await fetcher(options);
-
-  // const request = await fetch('/api/v1/tasks', {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Access-Control-Allow-Origin': '*',
-  //   },
-  // });
-  // const data = await request.json();
-  // console.log({ data });
-  // return data;
 };
 export const useGetAllTasks = (onSuccess, onError) => {
   return useQuery('fetchAll', getAllTasks);
