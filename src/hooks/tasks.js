@@ -16,9 +16,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 // };
 
 const fetcher = async (options) => {
-  console.log({ options });
   let res;
-
   if (options.body) {
     res = await fetch(
       `${options.id ? '/api/v1/tasks/' + options.id : '/api/v1/tasks'}`,
@@ -44,9 +42,6 @@ const fetcher = async (options) => {
       }
     );
     return res.json();
-    // const data = await res.json();
-    // console.log({ data });
-    // return data;
   }
 };
 

@@ -12,7 +12,7 @@ app.use(
   })
 );
 // routes
-app.use(tasks);
+app.use('/api/v1/tasks', tasks);
 
 // app.get('/api/v1/tasks')
 // app.post('/api/v1/tasks')
