@@ -90,8 +90,15 @@ export const useFetchItem = (id) => {
   });
 };
 
-export const updateItem = (task) => {
+export const updateItem = async (task) => {
   // throw new Error('Not implemented');
+  const options = {
+    baseURL,
+    method: 'PATCH',
+    id: task.id,
+    body: task,
+  };
+  return await fetcher(options);
   return axios
     .patch(`http://localhost:3000/api/v1/tasks/${task.id}`, {
       name: task.name,
