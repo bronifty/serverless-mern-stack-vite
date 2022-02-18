@@ -1,12 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import fetcher from './fetcher';
 const baseURL = '/api/v1/tasks/';
-const options = {
-  baseURL,
-};
 
 export const getAllTasks = async () => {
-  options.method = 'GET';
+  const options = { baseURL, method: 'GET' };
   return await fetcher(options);
 };
 export const useGetAllTasks = (onSuccess, onError) => {
@@ -16,20 +13,9 @@ export const useGetAllTasks = (onSuccess, onError) => {
 export const addItem = async (name) => {
   // throw new Error('not implemented');
   // await new Promise((resolve) => setTimeout(resolve, 1000));
-  console.log('in the post request for addOne');
-  return fetch('/api/v1/tasks', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({ name }),
-  })
-    .then((res) => res.json)
-    .then((res) => res.task);
-  // return axios
-  //   .post('http://localhost:3000/api/v1/tasks', { name })
-  //   .then((res) => res.data);
+  const options = { baseURL, method: 'POST', body: { name } };
+  console.log('in addItem; options: \n', { options });
+  return await fetcher(options);
 };
 export const useAddItem = () => {
   const queryClient = useQueryClient();
@@ -56,10 +42,12 @@ export const useAddItem = () => {
   });
 };
 
-export const deleteItem = (id) => {
-  return axios
-    .delete(`http://localhost:3000/api/v1/tasks/${id}`)
-    .then((res) => res.data);
+export const deleteItem = async (id) => {
+  throw new Error('not implemented');
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  options.method = 'DELETE';
+  options.id = id;
+  return fetcher(options);
 };
 export const useDeleteItem = () => {
   const queryClient = useQueryClient();
@@ -87,15 +75,21 @@ export const useDeleteItem = () => {
 };
 
 export const getTask = (id) => {
-  return axios
-    .get(`http://localhost:3000/api/v1/tasks/${id}`)
-    .then((res) => res.data);
+  options.method = 'GET';
+  options.id = id;
+  return fetcher(options);
+  // return axios
+  //   .get(`http://localhost:3000/api/v1/tasks/${id}`)
+  //   .then((res) => res.data);
 };
 
 export const fetchItem = (id) => {
-  return axios
-    .get(`http://localhost:3000/api/v1/tasks/${id}`)
-    .then((res) => res.data);
+  options.method = 'GET';
+  // options.id = id;
+  return fetcher(options);
+  // return axios
+  //   .get(`http://localhost:3000/api/v1/tasks/${id}`)
+  //   .then((res) => res.data);
 };
 export const useFetchItem = (id) => {
   const queryClient = useQueryClient();

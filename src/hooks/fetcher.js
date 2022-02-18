@@ -1,4 +1,5 @@
 export default async (options) => {
+  console.log('in the fetcher; options: \n', { options });
   let res;
   try {
     if (options.body) {
@@ -11,6 +12,7 @@ export default async (options) => {
             'Access-Control-Allow-Origin': '*',
           },
           body: JSON.stringify(options.body),
+          // body: JSON.stringify(options.body),
         }
       );
       return res.json();
