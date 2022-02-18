@@ -40,13 +40,8 @@ export const useAddItem = () => {
 };
 
 export const deleteItem = async (id) => {
-  // throw new Error('not implemented');
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   const options = { baseURL, method: 'DELETE', id };
   return await fetcher(options);
-  options.method = 'DELETE';
-  options.id = id;
-  return fetcher(options);
 };
 export const useDeleteItem = () => {
   const queryClient = useQueryClient();
@@ -73,22 +68,9 @@ export const useDeleteItem = () => {
   });
 };
 
-export const getTask = (id) => {
-  options.method = 'GET';
-  options.id = id;
-  return fetcher(options);
-  // return axios
-  //   .get(`http://localhost:3000/api/v1/tasks/${id}`)
-  //   .then((res) => res.data);
-};
-
-export const fetchItem = (id) => {
-  options.method = 'GET';
-  // options.id = id;
-  return fetcher(options);
-  // return axios
-  //   .get(`http://localhost:3000/api/v1/tasks/${id}`)
-  //   .then((res) => res.data);
+export const fetchItem = async (id) => {
+  const options = { baseURL, method: 'GET', id };
+  return await fetcher(options);
 };
 export const useFetchItem = (id) => {
   const queryClient = useQueryClient();
