@@ -99,12 +99,6 @@ export const updateItem = async (task) => {
     body: task,
   };
   return await fetcher(options);
-  return axios
-    .patch(`http://localhost:3000/api/v1/tasks/${task.id}`, {
-      name: task.name,
-      completed: task.completed,
-    })
-    .then((res) => res.data);
 };
 export const useUpdateItem = () => {
   const queryClient = useQueryClient();
