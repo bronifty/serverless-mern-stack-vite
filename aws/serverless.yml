@@ -1,0 +1,19 @@
+service: aws
+# app: aws
+# org: nathanjmorton
+frameworkVersion: '3'
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+functions:
+  app:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-offline
