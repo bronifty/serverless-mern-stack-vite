@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import fetcher from './fetcher';
-const baseURL = '/api/v1/tasks/';
+const baseURL = '/.netlify/functions/index/api/v1/tasks/';
+// const baseURL = '/api/v1/tasks/';
 
 export const getAllTasks = async () => {
   const options = { baseURL, method: 'GET' };
