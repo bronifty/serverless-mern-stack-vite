@@ -11,10 +11,7 @@ export const useGetAllTasks = (onSuccess, onError) => {
 };
 
 export const addItem = async (name) => {
-  // throw new Error('not implemented');
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   const options = { baseURL, method: 'POST', body: { name } };
-  console.log('in addItem; options: \n', { options });
   return await fetcher(options);
 };
 export const useAddItem = () => {
@@ -43,8 +40,10 @@ export const useAddItem = () => {
 };
 
 export const deleteItem = async (id) => {
-  throw new Error('not implemented');
+  // throw new Error('not implemented');
   // await new Promise((resolve) => setTimeout(resolve, 1000));
+  const options = { baseURL, method: 'DELETE', id };
+  return await fetcher(options);
   options.method = 'DELETE';
   options.id = id;
   return fetcher(options);
