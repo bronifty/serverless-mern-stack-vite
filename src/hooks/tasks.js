@@ -92,7 +92,7 @@ export const useDeleteOne = () => {
   });
 };
 
-export const updateItem = async (task) => {
+export const updateOne = async (task) => {
   // throw new Error('Not implemented');
   const options = {
     baseURL,
@@ -102,9 +102,9 @@ export const updateItem = async (task) => {
   };
   return await fetcher(options);
 };
-export const useUpdateItem = () => {
+export const useUpdateOne = () => {
   const queryClient = useQueryClient();
-  return useMutation(updateItem, {
+  return useMutation(updateOne, {
     onMutate: async (item) => {
       await queryClient.cancelQueries('fetchAll');
       // const prevData = queryClient.setQueryData('fetchAll', (prevState) => {

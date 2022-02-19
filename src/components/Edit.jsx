@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useFetchOne, useUpdateItem } from '../hooks';
+import { useFetchOne, useUpdateOne } from '../hooks';
 
 export const Edit = () => {
   const { id } = useParams();
   const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
-  const { mutate: updateItem } = useUpdateItem();
+  const { mutate: updateOne } = useUpdateOne();
   const [name, setName] = React.useState('');
   const [completed, setCompleted] = React.useState(false);
   React.useEffect(() => {
@@ -15,7 +15,7 @@ export const Edit = () => {
 
   const onUpdateTask = (e) => {
     e.preventDefault();
-    updateItem({ id, name, completed });
+    updateOne({ id, name, completed });
   };
 
   // editFormDOM.addEventListener('submit', async (e) => {
