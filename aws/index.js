@@ -16,8 +16,14 @@ app.use(
 );
 app.use('/api/v1/tasks', tasks);
 const handler = serverless(app);
+// aws doesn't play nice with the cached db connexion, so we need to close it
 module.exports.handler = async (event, context) => {
-  await mongoose.connect(uri);
+  await mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
   const result = await handler(event, context);
   await mongoose.connection.close();
   return result;
