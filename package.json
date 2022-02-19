@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "netlify-lambda build netlify && vite build",
+    "build": "vite build",
+    "build:ntl": "netlify-lambda build netlify && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
