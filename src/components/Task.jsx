@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaRegCheckCircle, FaRegEdit } from 'react-icons/fa';
-import { useDeleteItem } from '../hooks';
+import { useDeleteOne } from '../hooks';
 
 export const Task = ({ completed, _id: taskID, name }) => {
-  const { mutate: deleteItem } = useDeleteItem();
+  const { mutate: deleteOne } = useDeleteOne();
   return (
     <div className={`single-task ${completed && 'task-completed'}`}>
       <h5>
@@ -19,7 +19,7 @@ export const Task = ({ completed, _id: taskID, name }) => {
           <FaRegEdit />
         </Link>
 
-        <button className='delete-btn' onClick={() => deleteItem(taskID)}>
+        <button className='delete-btn' onClick={() => deleteOne(taskID)}>
           <FaTrashAlt />
         </button>
       </div>

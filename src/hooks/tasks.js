@@ -3,21 +3,44 @@ import fetcher from './fetcher';
 // const baseURL = '/.netlify/functions/index/api/v1/tasks/';
 const baseURL = '/api/v1/tasks/';
 
-export const getAllTasks = async () => {
+export const fetchAll = async () => {
+  // throw new Error('Not implemented');
   const options = { baseURL, method: 'GET' };
   return await fetcher(options);
 };
-export const useGetAllTasks = (onSuccess, onError) => {
-  return useQuery('fetchAll', getAllTasks);
+export const useFetchAll = (onSuccess, onError) => {
+  return useQuery('fetchAll', fetchAll);
 };
 
-export const addItem = async (name) => {
+export const fetchOne = async (id) => {
+  const options = { baseURL, method: 'GET', id };
+  return await fetcher(options);
+};
+export const useFetchOne = (id) => {
+  const queryClient = useQueryClient();
+  return useQuery(['fetchOne', id], () => fetchOne(id), {
+    initialData: () => {
+      const adminItem = queryClient
+        .getQueryData('fetchAll')
+        ?.data?.find((item) => item.id == id);
+      if (adminItem) {
+        return {
+          data: adminItem,
+        };
+      } else {
+        return undefined;
+      }
+    },
+  });
+};
+
+export const addOne = async (name) => {
   const options = { baseURL, method: 'POST', body: { name } };
   return await fetcher(options);
 };
-export const useAddItem = () => {
+export const useAddOne = () => {
   const queryClient = useQueryClient();
-  return useMutation(addItem, {
+  return useMutation(addOne, {
     onMutate: async (item) => {
       await queryClient.cancelQueries('fetchAll');
       const prevData = queryClient.setQueryData('fetchAll', (prevState) => {
@@ -40,13 +63,13 @@ export const useAddItem = () => {
   });
 };
 
-export const deleteItem = async (id) => {
+export const deleteOne = async (id) => {
   const options = { baseURL, method: 'DELETE', id };
   return await fetcher(options);
 };
-export const useDeleteItem = () => {
+export const useDeleteOne = () => {
   const queryClient = useQueryClient();
-  return useMutation(deleteItem, {
+  return useMutation(deleteOne, {
     onMutate: async (item) => {
       await queryClient.cancelQueries('fetchAll');
       const prevData = queryClient.setQueryData('fetchAll', (prevState) => {
@@ -65,28 +88,6 @@ export const useDeleteItem = () => {
     },
     onSettled: (data) => {
       queryClient.invalidateQueries('fetchAll');
-    },
-  });
-};
-
-export const fetchItem = async (id) => {
-  const options = { baseURL, method: 'GET', id };
-  return await fetcher(options);
-};
-export const useFetchItem = (id) => {
-  const queryClient = useQueryClient();
-  return useQuery(['fetchItem', id], () => fetchItem(id), {
-    initialData: () => {
-      const adminItem = queryClient
-        .getQueryData('fetchAll')
-        ?.data?.find((item) => item.id == id);
-      if (adminItem) {
-        return {
-          data: adminItem,
-        };
-      } else {
-        return undefined;
-      }
     },
   });
 };

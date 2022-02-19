@@ -1,10 +1,10 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useFetchItem, useUpdateItem } from '../hooks';
+import { useFetchOne, useUpdateItem } from '../hooks';
 
 export const Edit = () => {
   const { id } = useParams();
-  const { data, isLoading, isFetching, isError, error } = useFetchItem(id);
+  const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
   const { mutate: updateItem } = useUpdateItem();
   const [name, setName] = React.useState('');
   const [completed, setCompleted] = React.useState(false);
