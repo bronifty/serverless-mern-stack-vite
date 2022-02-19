@@ -9,7 +9,7 @@ provider:
   region: us-east-1
 functions:
   app:
-    handler: index.handler
+    handler: aws/index.handler
     events:
       - httpApi:
           path: /{proxy+}
