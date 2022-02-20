@@ -18,7 +18,11 @@ export const fetchOne = async (id) => {
   return await fetcher(options);
 };
 export const useFetchOne = (id) => {
-  return useQuery(['fetchOne', id], () => fetchOne(id));
+  const queryClient = useQueryClient();
+  const oldData = queryClient.getQueryData(['fetchOne', id]);
+  return useQuery(['fetchOne', id], () => fetchOne(id), {
+    initialData: oldData,
+  });
 };
 
 export const addOne = async (name) => {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useFetchOne, useUpdateOne } from '../hooks';
+import { useFetchOne, useUpdateOne, fetchAll } from '../hooks';
+import { useQueryClient } from 'react-query';
 
 export const Edit = () => {
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
   console.log({ data, id });
@@ -18,42 +20,6 @@ export const Edit = () => {
     e.preventDefault();
     updateOne({ id, name, completed });
   };
-
-  // editFormDOM.addEventListener('submit', async (e) => {
-  //   editBtnDOM.textContent = 'Loading...';
-  //   e.preventDefault();
-  //   try {
-  //     const taskName = taskNameDOM.value;
-  //     const taskCompleted = taskCompletedDOM.checked;
-
-  //     const {
-  //       data: { task },
-  //     } = await axios.patch(`/api/v1/tasks/${id}`, {
-  //       name: taskName,
-  //       completed: taskCompleted,
-  //     });
-
-  //     const { _id: taskID, completed, name } = task;
-
-  //     taskIDDOM.textContent = taskID;
-  //     taskNameDOM.value = name;
-  //     taskCompletedDOM.checked = completed;
-  //     tempName = name;
-  //     formAlertDOM.style.display = 'block';
-  //     formAlertDOM.textContent = `success, edited task`;
-  //     formAlertDOM.classList.add('text-success');
-  //   } catch (error) {
-  //     console.error(error);
-  //     taskNameDOM.value = tempName;
-  //     formAlertDOM.style.display = 'block';
-  //     formAlertDOM.innerHTML = `error, please try again`;
-  //   }
-  //   editBtnDOM.textContent = 'Edit';
-  //   setTimeout(() => {
-  //     formAlertDOM.style.display = 'none';
-  //     formAlertDOM.classList.remove('text-success');
-  //   }, 3000);
-  // });
 
   return (
     <div className='container'>
@@ -88,7 +54,15 @@ export const Edit = () => {
         </button>
         <div className='form-alert'></div>
       </form>
-      <Link to='/' className='btn back-link'>
+      <Link
+        to='/'
+        className='btn back-link'
+        onMouseOver={() => {
+          queryClient.prefetchQuery(['fetchAll'], () => fetchAll(), {
+            staleTime: Infinity,
+          });
+        }}
+      >
         Back to Tasks
       </Link>
     </div>
