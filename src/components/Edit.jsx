@@ -1,14 +1,29 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useFetchOne, useUpdateOne, fetchAll } from '../hooks';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 
 export const Edit = () => {
   const queryClient = useQueryClient();
   const { id } = useParams();
   const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
+  //   const {
+  //    data,
+  //    error,
+  //    isError,
+  //    isIdle,
+  //    isLoading,
+  //    isPaused,
+  //    isSuccess,
+  //    mutate,
+  //    mutateAsync,
+  //    reset,
+  //    status,
+  //  } = useMutation(mutationFn, {
+
   console.log({ data, id });
-  const { mutate: updateOne } = useUpdateOne();
+  const mutation = useUpdateOne();
+  // const { mutate: updateOne } = useUpdateOne();
   const [name, setName] = React.useState('');
   const [completed, setCompleted] = React.useState(false);
   React.useEffect(() => {
@@ -18,7 +33,12 @@ export const Edit = () => {
 
   const onUpdateTask = (e) => {
     e.preventDefault();
-    updateOne({ id, name, completed });
+    mutation.mutate({
+      id,
+      name,
+      completed,
+    });
+    console.log({ mutation });
   };
 
   return (
@@ -52,7 +72,15 @@ export const Edit = () => {
         <button type='submit' className='block btn task-edit-btn'>
           Update
         </button>
-        <div className='form-alert'></div>
+        <div className='form-alert'>
+          {mutation.isError ? (
+            <div>Error</div>
+          ) : mutation.isSuccess ? (
+            <div className='alert-success'>Success</div>
+          ) : (
+            <div>&nbsp;</div>
+          )}
+        </div>
       </form>
       <Link
         to='/'

@@ -127,6 +127,7 @@ export const useUpdateOne = () => {
   const queryClient = useQueryClient();
   return useMutation(updateOne, {
     onMutate: async (values) => {
+      // throw new Error('Not implemented');
       console.log({ values });
       if (filter.isProfane(values.name)) {
         console.log('in the profanity filter of addOne to axios');
