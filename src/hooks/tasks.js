@@ -6,13 +6,10 @@ import fetcher from './fetcher';
 const baseURL = '/api/v1/tasks/';
 
 export const fetchAll = async () => {
-  // throw new Error('Not implemented');
   const options = { baseURL, method: 'GET' };
   return await fetcher(options);
 };
 export const useFetchAll = (onSuccess, onError) => {
-  // const queryClient = useQueryClient();
-  // console.log('queryClient in fetchAll: \n', { queryClient });
   return useQuery(['fetchAll'], fetchAll);
 };
 
@@ -21,21 +18,7 @@ export const fetchOne = async (id) => {
   return await fetcher(options);
 };
 export const useFetchOne = (id) => {
-  const queryClient = useQueryClient();
-  return useQuery(['fetchOne', id], () => fetchOne(id), {
-    initialData: () => {
-      const adminItem = queryClient
-        .getQueryData(['fetchAll'])
-        ?.data?.find((item) => item.id == id);
-      if (adminItem) {
-        return {
-          data: adminItem,
-        };
-      } else {
-        return undefined;
-      }
-    },
-  });
+  return useQuery(['fetchOne', id], () => fetchOne(id));
 };
 
 export const addOne = async (name) => {
@@ -110,19 +93,12 @@ export const useDeleteOne = () => {
       });
       // rollback function to revert changes
       return () => queryClient.setQueryData(['fetchAll'], oldData);
-      // const prevData = queryClient.setQueryData(['fetchAll'], (prevState) => {
-      //   return {
-      //     ...prevState,
-      //     data: [
-      //       ...prevState.tasks,
-      //       { id: prevState?.tasks?.length + 1, ...item },
-      //     ],
-      //   };
-      // });
-      // return { prevData };
     },
-    onError: (_error, _item, context) => {
-      queryClient.setQueryData(['fetchAll'], context.prevData);
+    onError: (error, values, rollback) => {
+      if (rollback) {
+        rollback();
+      }
+      return { success: false };
     },
     onSettled: (data) => {
       queryClient.invalidateQueries(['fetchAll']);
@@ -131,7 +107,6 @@ export const useDeleteOne = () => {
 };
 
 export const updateOne = async (task) => {
-  // throw new Error('Not implemented');
   const options = {
     baseURL,
     method: 'PATCH',

@@ -5,12 +5,13 @@ import { useFetchOne, useUpdateOne } from '../hooks';
 export const Edit = () => {
   const { id } = useParams();
   const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
+  console.log({ data, id });
   const { mutate: updateOne } = useUpdateOne();
   const [name, setName] = React.useState('');
   const [completed, setCompleted] = React.useState(false);
   React.useEffect(() => {
-    setName(data?.task?.name);
-    setCompleted(data?.task?.completed);
+    setName(data?.name);
+    setCompleted(data?.completed);
   }, [data]);
 
   const onUpdateTask = (e) => {
