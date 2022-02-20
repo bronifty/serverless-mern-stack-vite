@@ -2,11 +2,13 @@
   "name": "vite-vercel",
   "private": true,
   "version": "0.0.0",
+  "main": "app.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:ntl": "netlify-lambda build netlify && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node app.js"
   },
   "dependencies": {
     "axios": "^0.25.0",
