@@ -14,6 +14,7 @@ sls offline start
 
 ### Vercel
 
+- Note: Vercel cli may not work for linking this vite project (with 'vercel link'); you may need to put the code in source control and connect it to your Vercel account manually.
 - in /src/hooks/tasks:
 - uncomment const baseURL = '/api/v1/tasks/';
 - comment const baseURL = '/.netlify/functions/index/api/v1/tasks/';
