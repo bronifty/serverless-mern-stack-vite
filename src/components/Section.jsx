@@ -1,11 +1,11 @@
 import { Task } from './Task';
 
-export const Section = ({ tasks }) => {
+export const Section = ({ data }) => {
   return (
     <section className='tasks-container'>
       <div className='tasks'>
-        {tasks ? (
-          tasks.map((task, idx) => <Task key={idx} {...task} />)
+        {data ? (
+          data.map((task, idx) => <Task key={idx} {...task} />)
         ) : (
           <div>no tasks</div>
         )}

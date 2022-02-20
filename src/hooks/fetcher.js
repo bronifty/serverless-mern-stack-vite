@@ -1,5 +1,5 @@
 export default async (options) => {
-  console.log('in the fetcher; options: \n', { options });
+  // console.log('in the fetcher; options: \n', { options });
   let res;
   try {
     if (options.body) {
@@ -15,7 +15,6 @@ export default async (options) => {
           // body: JSON.stringify(options.body),
         }
       );
-      return res.json();
     } else {
       res = await fetch(
         `${options.id ? options.baseURL + options.id : options.baseURL}`,
@@ -27,8 +26,9 @@ export default async (options) => {
           },
         }
       );
-      return res.json();
     }
+    const resJSON = await res.json();
+    return await resJSON.tasks;
   } catch (error) {
     console.log({ error });
     return res.json(error);

@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAddOne } from '../hooks';
-
+const defaultValues = {
+  name: '',
+  completed: false,
+};
 export const Form = () => {
   const addItemMutation = useAddOne();
   const [show, toggle] = React.useReducer((d) => !d, false);
