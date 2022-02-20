@@ -1,58 +1,45 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useFetchItem, useUpdateItem } from '../hooks';
+import { useFetchOne, useUpdateOne, fetchAll } from '../hooks';
+import { useQueryClient, useMutation } from 'react-query';
 
 export const Edit = () => {
+  const queryClient = useQueryClient();
   const { id } = useParams();
-  const { data, isLoading, isFetching, isError, error } = useFetchItem(id);
-  const { mutate: updateItem } = useUpdateItem();
+  const { data, isLoading, isFetching, isError, error } = useFetchOne(id);
+  //   const {
+  //    data,
+  //    error,
+  //    isError,
+  //    isIdle,
+  //    isLoading,
+  //    isPaused,
+  //    isSuccess,
+  //    mutate,
+  //    mutateAsync,
+  //    reset,
+  //    status,
+  //  } = useMutation(mutationFn, {
+
+  console.log({ data, id });
+  const mutation = useUpdateOne();
+  // const { mutate: updateOne } = useUpdateOne();
   const [name, setName] = React.useState('');
   const [completed, setCompleted] = React.useState(false);
   React.useEffect(() => {
-    setName(data?.task?.name);
-    setCompleted(data?.task?.completed);
+    setName(data?.name);
+    setCompleted(data?.completed);
   }, [data]);
 
   const onUpdateTask = (e) => {
     e.preventDefault();
-    updateItem({ id, name, completed });
+    mutation.mutate({
+      id,
+      name,
+      completed,
+    });
+    console.log({ mutation });
   };
-
-  // editFormDOM.addEventListener('submit', async (e) => {
-  //   editBtnDOM.textContent = 'Loading...';
-  //   e.preventDefault();
-  //   try {
-  //     const taskName = taskNameDOM.value;
-  //     const taskCompleted = taskCompletedDOM.checked;
-
-  //     const {
-  //       data: { task },
-  //     } = await axios.patch(`/api/v1/tasks/${id}`, {
-  //       name: taskName,
-  //       completed: taskCompleted,
-  //     });
-
-  //     const { _id: taskID, completed, name } = task;
-
-  //     taskIDDOM.textContent = taskID;
-  //     taskNameDOM.value = name;
-  //     taskCompletedDOM.checked = completed;
-  //     tempName = name;
-  //     formAlertDOM.style.display = 'block';
-  //     formAlertDOM.textContent = `success, edited task`;
-  //     formAlertDOM.classList.add('text-success');
-  //   } catch (error) {
-  //     console.error(error);
-  //     taskNameDOM.value = tempName;
-  //     formAlertDOM.style.display = 'block';
-  //     formAlertDOM.innerHTML = `error, please try again`;
-  //   }
-  //   editBtnDOM.textContent = 'Edit';
-  //   setTimeout(() => {
-  //     formAlertDOM.style.display = 'none';
-  //     formAlertDOM.classList.remove('text-success');
-  //   }, 3000);
-  // });
 
   return (
     <div className='container'>
@@ -85,9 +72,25 @@ export const Edit = () => {
         <button type='submit' className='block btn task-edit-btn'>
           Update
         </button>
-        <div className='form-alert'></div>
+        <div className='form-alert'>
+          {mutation.isError ? (
+            <div>Error</div>
+          ) : mutation.isSuccess ? (
+            <div className='alert-success'>Success</div>
+          ) : (
+            <div>&nbsp;</div>
+          )}
+        </div>
       </form>
-      <Link to='/' className='btn back-link'>
+      <Link
+        to='/'
+        className='btn back-link'
+        onMouseOver={() => {
+          queryClient.prefetchQuery(['fetchAll'], () => fetchAll(), {
+            staleTime: Infinity,
+          });
+        }}
+      >
         Back to Tasks
       </Link>
     </div>

@@ -1,10 +1,10 @@
 import React from 'react';
-import { useGetAllTasks } from '../hooks';
+import { useFetchAll } from '../hooks';
 import { Form } from './Form';
 import { Section } from './Section';
 
 export const TodoApp = () => {
-  const { data, isLoading, isError, error } = useGetAllTasks();
+  const { data, isLoading, isError, error } = useFetchAll();
   if (isLoading) {
     return <h2>Loading...</h2>;
   }
@@ -14,7 +14,8 @@ export const TodoApp = () => {
   return (
     <div className='todo-app'>
       <Form />
-      {data && <Section tasks={data?.tasks} />}
+      {data && <Section data={data} />}
+      {/* {data && <Section tasks={data} />} */}
     </div>
   );
 };
