@@ -107,6 +107,10 @@ export const useDeleteOne = () => {
 };
 
 export const updateOne = async (task) => {
+  if (filter.isProfane(task.name)) {
+    console.log('in the profanity filter of addOne to axios');
+    throw new Error('Profanity detected');
+  }
   const options = {
     baseURL,
     method: 'PATCH',
@@ -118,27 +122,29 @@ export const updateOne = async (task) => {
 export const useUpdateOne = () => {
   const queryClient = useQueryClient();
   return useMutation(updateOne, {
-    onMutate: async (item) => {
-      await queryClient.cancelQueries(['fetchAll']);
-      // const prevData = queryClient.setQueryData(['fetchAll'], (prevState) => {
-
-      //   return {
-      //     ...prevState,
-      //     data: [
-      //       ...prevState.data,
-      //       { id: prevState?.data?.length + 1, ...item },
-      //     ],
-      //   };
-      // });
-      // return { prevData };
+    onMutate: async (values) => {
+      console.log({ values });
+      if (filter.isProfane(values.name)) {
+        console.log('in the profanity filter of addOne to axios');
+        throw new Error('Profanity detected');
+      }
+      await queryClient.cancelQueries(['fetchOne', values.id]);
+      // Snapshot the previous value
+      const oldData = queryClient.getQueryData(['fetchOne', values.id]);
+      // Optimistically update to the new value
+      queryClient.setQueryData(['fetchOne', values.id], values);
+      // rollback function to revert changes
+      return () => queryClient.setQueryData(['fetchOne', values.id], oldData);
     },
-    onError: (error, item, context) => {
-      queryClient.setQueryData(['fetchAll'], context.prevData);
-      return { error };
+    onSuccess: (data, values) => {},
+    onError: (error, values, rollback) => {
+      if (rollback) {
+        rollback();
+      }
+      return { success: false };
     },
-    onSettled: (data) => {
-      queryClient.invalidateQueries(['fetchAll']);
-      return { data };
+    onSettled: (data, error, values) => {
+      queryClient.invalidateQueries(['fetchOne', values.id]);
     },
   });
 };
